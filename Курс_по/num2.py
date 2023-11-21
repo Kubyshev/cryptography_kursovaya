@@ -1,13 +1,11 @@
 import math
-def NOD(x: int, y: int):
-    if (y == 0):  # it divide every number
-        return x  # return x
-    else:
-        return NOD(y, x % y)
+
 def phi(p: int, q: int) :
+    #функция Эйлера
     return (p - 1) * (q - 1)
 
 def make_table(alphabet: str) -> dict:
+    #
     table: dict = {}
     for i, char in enumerate(alphabet):
         table[char] = i + 1
@@ -53,8 +51,6 @@ table: dict = make_table(alphabet)
 
 
 fio: str = "кубышев артём сергеевич"
-
-slovo: str = fio.split(" ")[0]
 
 initials = "".join([s[0] for s in fio.split(" ")])
 print("Инициалы:", initials)
