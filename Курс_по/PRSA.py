@@ -1,42 +1,52 @@
 import math
 
+def phi(p: int, q: int) :
+    return (p - 1) * (q - 1)
 
-def generate_keys():
-    #Числа по вариантам
-    p = 47
-    q = 41
-
-    n = p * q
-    e = 0
-    phi = (p - 1) * (q - 1)
-    print(n,phi)
-    d = 5
+def get_d(phi: int, d) :
     while (d < phi):
         if (math.gcd(d, phi) == 1):
             break
         else:
             d += 1
+    return d
+def get_e(d: int, phi: int) :
+    tmp: list[int] = []
     for k in range(1, d):
         if (phi * k + 1) % d == 0:
             e = int((phi * k + 1) / d)
-    return ((e, n), (d, n))
-
-def encrypt(public_key,num):
-    e,n = public_key
-    C=(num**e)%n
-    return C
-def decrypt(private_key,num):
-    d,n=private_key
-    C=(num**d)%n
-    return C
+            print(k)
+    return e
 
 
-public_key, private_key = generate_keys()
-encrypted_message = encrypt(public_key, 262)
+print("\n", "===" * 3, " Задание№4(ЭЦП)", "===" * 3, "\n")
 
-print(public_key)
-print("Зашифрованное сообщение:", encrypted_message)
-print(private_key)
-decrypt_messege=decrypt(private_key,encrypted_message)
-print("Расшифрованное сообщение",decrypt_messege)
+#Поставить p и q по своему варианту, и H из 3-го задания
+p: int = 47
+q: int = 41
+N: int = p * q
+H: int = 262
 
+phi: int = phi(p,q)
+
+# генерация новых Д и Е
+d=5
+d: int = get_d(phi,d)
+
+e: int = get_e(d, phi)
+
+
+S: int = (H ** d) % N
+
+m: int = (S ** e) % N
+
+
+print("\n", "===" * 3, "Создание подписи", "===" * 3, "\n")
+print("Секретный ключ","(", d,",",N,")")
+print("Открытый ключ","(", e,",",N,")")
+print("Зашифрованное=", S)
+print("Расшифрованное =", m)
+
+
+print()
+print(f"Проверка H & m: {H} & {m} = {H == m}")
