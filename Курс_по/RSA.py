@@ -1,41 +1,86 @@
 import math
 
+def phi(p: int, q: int) :
+    #функция Эйлера
+    return (p - 1) * (q - 1)
 
-def generate_keys():
-    #Числа по вариантам
-    p = 41
-    q = 29
+def make_table(alphabet: str) -> dict:
+    #
+    table: dict = {}
+    for i, char in enumerate(alphabet):
+        table[char] = i + 1
+    return table
 
-    n = p * q
-    e = 0
-    phi = (p - 1) * (q - 1)
-    d = 2
+
+def get_M(word: str) -> list[int]:
+    M: list[int] = list()
+    for char in word:
+        M.append(table[char])
+    return M
+
+def get_d(phi: int, d) :
     while (d < phi):
         if (math.gcd(d, phi) == 1):
             break
         else:
             d += 1
+    return d
+
+
+def get_e(d: int, phi: int) :
+    tmp: list[int] = []
     for k in range(1, d):
         if (phi * k + 1) % d == 0:
             e = int((phi * k + 1) / d)
-    return ((e, n), (d, n))
-
-def encrypt(public_key,num):
-    e,n = public_key
-    C=(num**e)%n
-    return C
-def decrypt(private_key,num):
-    d,n=private_key
-    C=(num**d)%n
-    return C
+            print(k)
+    return e
 
 
-public_key, private_key = generate_keys()
-encrypted_message = encrypt(public_key, 12)
-print(19)
-print(public_key)
-print("Зашифрованное сообщение:", encrypted_message)
-print(private_key)
-decrypt_messege=decrypt(private_key,encrypted_message)
-print("Расшифрованное сообщение",decrypt_messege)
+# p и q поставить по заданию №2
+p = 67
+q = 53
+
+N= p * q
+
+alphabet: str = "абвгдеёжзийклмнопрстуфхцчшщъыьэюя"
+
+
+phi = phi(p, q)
+
+
+table: dict = make_table(alphabet)
+
+
+fio: str = "кубышев артём сергеевич"
+
+initials = "".join([s[0] for s in fio.split(" ")])
+print("Инициалы:", initials)
+
+
+print("\n", "===" * 3, " Задние№2 RSA", "===" * 3, "\n")
+
+d=2
+d: int = get_d(phi,d)
+
+
+e: int = get_e(d, phi)
+
+
+M: list[int] = get_M(initials)
+
+C: list[int] = []
+for i in range(len(initials)):
+    C.append((M[i] ** e) % N)
+
+
+D: list[int] = []
+for c in C:
+    D.append((c ** d) % N)
+
+print(phi)
+print("Секретный ключ:","(", d,",",N,")")
+print("Открытый ключ:", "(",e,",",N,")")
+print("Зашифрованное сообщение:", C)
+print("Расшифр сообщение:", D)
+
 
